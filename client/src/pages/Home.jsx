@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments } from "@fortawesome/free-solid-svg-icons";
+import Loader from "../components/Loader";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -12,10 +13,15 @@ const Home = () => {
     const [roomCodeError, setRoomCodeError] = useState("");
     const [passwordError, setPasswordError] = useState("");
 
+    const [createRoomLoading, setCreateRoomLoading] = useState(false);
+    const [joinRoomLoading, setJoinRoomLoading] = useState(false);
+    const loading = createRoomLoading || joinRoomLoading;
+
     const handleCreateRoom = async () => {
         try {
             setRoomCodeError("");
             setPasswordError("");
+            setCreateRoomLoading(true);
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}/room/create`, {
                 method: "POST",
@@ -34,6 +40,7 @@ const Home = () => {
                         if (error.path === "password") setPasswordError(error.msg);
                     });
 
+                    setCreateRoomLoading(false);
                     return;
                 }
 
@@ -45,12 +52,15 @@ const Home = () => {
         } catch (error) {
             setPasswordError(error.message);
         }
+
+        setCreateRoomLoading(false);
     };
 
     const handleJoinRoom = async () => {
         try {
             setRoomCodeError("");
             setPasswordError("");
+            setJoinRoomLoading(true);
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}/room/verify`, {
                 method: "POST",
@@ -69,6 +79,7 @@ const Home = () => {
                         if (error.path === "password") setPasswordError(error.msg);
                     });
 
+                    setJoinRoomLoading(false);
                     return;
                 }
 
@@ -81,6 +92,8 @@ const Home = () => {
         } catch (error) {
             setPasswordError(error.message);
         }
+
+        setJoinRoomLoading(false);
     };
 
     return (
@@ -105,12 +118,14 @@ const Home = () => {
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-4 items-center justify-center  w-full">
-                        <button type="button" onClick={handleCreateRoom} className="px-4 py-2 bg-blue-600 rounded-lg shadow-md w-full">
-                            Create Room
+                        <button type="button" onClick={handleCreateRoom} className={`whitespace-nowrap px-4 py-2 bg-blue-600 rounded-lg shadow-md w-full flex items-center justify-center gap-2 ${loading ? "opacity-75 bg-opacity-50 cursor-not-allowed" : ""}`} disabled={loading}>
+                            {createRoomLoading && <Loader />}
+                            <span>Create Room</span>
                         </button>
 
-                        <button type="button" onClick={handleJoinRoom} className="px-4 py-2 bg-green-600 rounded-lg shadow-md w-full">
-                            Join Room
+                        <button type="button" onClick={handleJoinRoom} className={`whitespace-nowrap px-4 py-2 bg-green-600 rounded-lg shadow-md w-full flex items-center justify-center gap-2 ${loading ? "opacity-75 bg-opacity-50 cursor-not-allowed" : ""}`} disabled={loading}>
+                            {joinRoomLoading && <Loader />}
+                            <span>Join Room</span>
                         </button>
                     </div>
                 </div>
