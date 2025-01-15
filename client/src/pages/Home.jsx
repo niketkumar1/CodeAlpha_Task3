@@ -34,10 +34,10 @@ const Home = () => {
             const data = await response.json();
             if (!data.status) {
                 if (data.errors) {
-                    data.errors.forEach((error) => {
-                        if (error.path === "roomCode") setRoomCodeError(error.msg);
+                    Object.keys(data.errors).forEach((error) => {
+                        if (error === "roomCode") setRoomCodeError(data.errors[error]);
 
-                        if (error.path === "password") setPasswordError(error.msg);
+                        if (error === "password") setPasswordError(data.errors[error]);
                     });
 
                     setCreateRoomLoading(false);
@@ -73,10 +73,10 @@ const Home = () => {
             const data = await response.json();
             if (!data.status) {
                 if (data.errors) {
-                    data.errors.forEach((error) => {
-                        if (error.path === "roomCode") setRoomCodeError(error.msg);
+                    Object.keys(data.errors).forEach((error) => {
+                        if (error === "roomCode") setRoomCodeError(data.errors[error]);
 
-                        if (error.path === "password") setPasswordError(error.msg);
+                        if (error === "password") setPasswordError(data.errors[error]);
                     });
 
                     setJoinRoomLoading(false);

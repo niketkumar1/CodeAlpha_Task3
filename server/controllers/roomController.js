@@ -2,8 +2,6 @@ const { validationResult } = require("express-validator");
 const Room = require("../models/Room");
 
 const createRoom = async (req, res) => {
-    if (!validationResult(req).isEmpty()) return res.status(400).json({ status: false, message: validationResult(req).array()[0].msg, errors: validationResult(req).array() });
-
     const { roomCode, password } = req.body;
 
     const roomExists = await Room.findOne({ code: roomCode });
@@ -17,8 +15,6 @@ const createRoom = async (req, res) => {
 };
 
 const verifyRoom = async (req, res) => {
-    if (!validationResult(req).isEmpty()) return res.status(400).json({ status: false, message: validationResult(req).array()[0].msg, errors: validationResult(req).array() });
-
     const { roomCode, password } = req.body;
 
     const room = await Room.findOne({ code: roomCode });
