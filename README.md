@@ -98,3 +98,4 @@ A demo of this application is hosted at [webrtc-video-chat.ahmedsobhy.net](https
 ## 📜 License
 
 This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE) file.
+
